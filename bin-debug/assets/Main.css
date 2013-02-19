@@ -1,0 +1,7 @@
+/* CSS file */
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace s "library://ns.adobe.com/flex/spark";
+
+s|FormItem {
+   skinClass: ClassReference("skins.FormValidatorItemSkin");
+}

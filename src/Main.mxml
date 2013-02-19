@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoftphoneBase xmlns:fx="http://ns.adobe.com/mxml/2009" 
+               xmlns:s="library://ns.adobe.com/flex/spark" 
+               xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="1000" 
+               xmlns="*">
+   
+   <fx:Declarations>
+      <fx:XML id="config" source="config.xml"/>
+      <s:RadioButtonGroup id="codecRadioBtnGroup" selectedValue="{config.soundCodec}"/>
+   </fx:Declarations>
+   
+   <layout>
+      <s:HorizontalLayout horizontalAlign="center"/>
+   </layout>
+   
+   <s:Group>
+      <s:Rect width="100%" height="100%">
+         <s:fill>
+            <s:SolidColor color="0x888888" />
+         </s:fill>
+      </s:Rect>
+      
+      <s:VGroup top="20" left="20" right="20" bottom="20">
+         <s:HGroup verticalAlign="middle">
+            <s:Form id="micSettingsForm">
+               <s:layout>
+                  <s:FormLayout gap="-10"/>
+               </s:layout>
+               <s:FormItem label="Select microphone">
+                  <mx:ComboBox id="micSelector">
+                     <mx:ArrayCollection>
+                        <fx:String>Mic 1</fx:String>
+                        <fx:String>Mic 2</fx:String>
+                     </mx:ArrayCollection>                     
+                  </mx:ComboBox>
+                  <SilenceLabelIndicator id="silenceLevelIndicator"/>
+               </s:FormItem>
+               
+               <s:FormItem label="Test Indicator:">
+                  <s:HSlider id="micSoundLevel" minimum="0" maximum="100" change="silenceLevelIndicator.onMicSignal(micSoundLevel.value)"/>
+               </s:FormItem>
+               
+               <s:FormItem label="Codec:">
+                  <s:layout>
+                     <s:HorizontalLayout verticalAlign="middle"/>
+                  </s:layout>
+                  <s:RadioButton id="codecRadioBtn1" value="Nelly Moster" label="Nelly Moster" groupName="codecRadioBtnGroup"/>
+                  <s:RadioButton id="codecRadioBtn2" value="Speex" label="Speex" groupName="codecRadioBtnGroup"/>
+               </s:FormItem>
+               
+               <s:FormItem label="Frame/Packet:">
+                  <s:NumericStepper id="framePacketSelector" minimum="1" stepSize="7" maximum="8" value="{config.packet}"/>
+               </s:FormItem>
+               
+               <s:FormItem label="VAD:">
+                  <s:CheckBox id="vadCheckBox"/>
+               </s:FormItem>
+               
+               <s:FormItem label="Gain:">
+                  <s:NumericStepper id="gainSelector" minimum="0" maximum="100" value="{config.gain}"/>
+               </s:FormItem>
+               
+               <s:FormItem label="Enhanced microphone">
+                  <mx:ComboBox id="echoCancelOptions" click="onEnhancedMic(event)">
+                     <mx:ArrayCollection>
+                        <fx:String>Full Duplex</fx:String>
+                        <fx:String>Half Duplex</fx:String>
+                        <fx:String>Headset</fx:String>
+                        <fx:String>Speaker Mute</fx:String>
+                     </mx:ArrayCollection>                     
+                  </mx:ComboBox>
+               </s:FormItem>
+               
+               <s:FormItem label="Silence level:">
+                  <s:layout>
+                     <s:HorizontalLayout verticalAlign="middle"/>
+                  </s:layout>
+                  <mx:Text text="{Math.round(micLevel.value)}" color="#58ACFA" fontSize="14" fontWeight="bold" width="20"/>
+                  <mx:HSlider id="micLevel" tickInterval="1" minimum="0" maximum="10" snapInterval="1" labels="[0, 5, 10]"/>
+               </s:FormItem>
+               
+               <s:FormItem label="Silence Timeout:">
+                  <s:layout>
+                     <s:HorizontalLayout verticalAlign="middle"/>
+                  </s:layout>
+                  <mx:Text text="{Math.round(silenceLevel.value)}" color="#58ACFA" fontSize="14" fontWeight="bold" width="20"/>
+                  <mx:HSlider id="silenceLevel" tickInterval="1" minimum="0" maximum="10" snapInterval="1" labels="[0, 5, 10]"/>
+               </s:FormItem>
+               
+               <s:FormItem label="Encoding:">
+                  <s:NumericStepper id="encodingQlty" value="{config.encodeQuality}"/>
+               </s:FormItem>
+            </s:Form>
+            <!-- begin change -->
+            
+            <s:VGroup horizontalAlign="center">
+               
+               <s:BorderContainer backgroundColor="0x888888" cornerRadius="10" borderStyle="solid" borderWeight="1">
+                  <s:VGroup horizontalAlign="center">
+                     <mx:Form>
+                        <mx:FormItem label="SIP host">
+                           <s:TextInput id="sipHost" text="{config.sip_host}" width="200"/>
+                        </mx:FormItem>
+                        <mx:FormItem label="UID">
+                           <s:TextInput id="u_id" text="{config.uid}" width="200"/>
+                        </mx:FormItem>
+                        <mx:FormItem label="SIP rtmp">
+                           <s:TextInput id="sipRtmp" text="{config.sip_rtmp}" width="200"/>
+                        </mx:FormItem>
+                        <mx:FormItem label="User name">
+                           <s:TextInput id="userName" text="{config.username}" width="200"/>
+                        </mx:FormItem>
+                        <mx:FormItem label="Password">
+                           <s:TextInput id="password" text="{config.password}" width="200"/>
+                        </mx:FormItem>
+                        <mx:FormItem label="Passocde">
+                           <s:TextInput id="passCode" text="{config.passcode}" width="200"/>
+                        </mx:FormItem>
+                        <mx:FormItem label="Toll phone">
+                           <s:TextInput id="tollPhone" text="{config.tollPhone}" width="200"/>
+                        </mx:FormItem>							
+                     </mx:Form>
+                     
+                     <s:HGroup>
+                        <s:Button label="Connect" click="onConnect()"/>
+                        <s:Button label="Disconnect" click="onDisconnect()"/>
+                        <s:Button label="Silent reconnect" click="onSilentReconnect()"/>
+                     </s:HGroup>
+                     
+                     <s:Spacer height="5"/>
+                  </s:VGroup>
+               </s:BorderContainer>
+               <s:Spacer height="5"/>
+            </s:VGroup>
+            
+            <s:VGroup horizontalAlign="center">
+               
+               <mx:HRule width="100%" height="1"/>
+               <s:Spacer height="5"/>
+               
+               <s:HGroup gap="30" horizontalAlign="center" verticalAlign="middle">
+                  
+                  <s:VGroup>
+                     <s:Button label="Mute" width="80" click="onMute()"/>
+                     <s:Button label="Send Info" width="80" click="onSendInfo()"/>
+                  </s:VGroup>
+                  
+                  <s:VGroup click="onDialPad(event)">
+                     
+                     <s:HGroup>
+                        <DialPadButton label="1"/>
+                        <DialPadButton label="2"/>
+                        <DialPadButton label="3"/>
+                     </s:HGroup>
+                     <s:HGroup>
+                        <DialPadButton label="4"/>
+                        <DialPadButton label="5"/>
+                        <DialPadButton label="6"/>
+                     </s:HGroup>
+                     <s:HGroup>
+                        <DialPadButton label="7"/>
+                        <DialPadButton label="8"/>
+                        <DialPadButton label="9"/>
+                     </s:HGroup>
+                     <s:HGroup>
+                        <DialPadButton label="*"/>
+                        <DialPadButton label="0"/>
+                        <DialPadButton label="#"/>
+                     </s:HGroup>					
+                  </s:VGroup>
+               </s:HGroup>
+               
+               <mx:HRule width="100%" height="1"/>
+               <s:Spacer height="5"/>
+               
+               <s:VGroup horizontalAlign="center">
+                  <s:TextArea id="sendText" width="200" height="50"/>
+                  <s:HGroup click="onSendText()">
+                     <s:Button label="Send"/>
+                     <s:Button label="Bad call"/>
+                     <s:Button label="PC is off"/>
+                  </s:HGroup>
+                  <s:Spacer height="10"/>
+               </s:VGroup>
+            </s:VGroup>
+         </s:HGroup>
+         
+         <s:Group width="100%" height="300">
+            <Logger id="log" width="100%" height="100%"/>
+            <s:Button label="Clear Log" right="20" click="onClear()"/>
+         </s:Group>
+      </s:VGroup>
+   </s:Group>	
+</SoftphoneBase>
